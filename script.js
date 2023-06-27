@@ -1,72 +1,193 @@
- let a1 = 5 % 3,
-    a2 = 3 % 5,
-    a3 = 5 + '3',
-    a4 = '5' - 3,
-    a5 = 75 + 'кг',
-    a6 = 785 * 653,
-    a7 = 100 / 25,
-    a8 = 0 * 0,
-    a9 = 0 / 2,
-    a10 = 89 / 0,
-    a11 = 98 + 2,
-    a12 = 5 - 98,
-    a13 = (8 + 56 * 4) / 5,
-    a14 = (9 - 12) * 7 / (5 + 2),
-    a15 = +"123",
-    a16 = 1 || 0,
-    a17 = false || true,
-    a18 = true > 0
+//задание 1, 2
+{
+    let nameUser = prompt("Ваше имя");
+    let age = Number(prompt("Ваш возраст"));
+    let city = prompt("Ваш город проживания");
+    let phone = prompt("Ваш номер телефона");
+    let email = prompt("Ваша эл. почта");
+    let company = prompt("Название вашей компании");
+    document.write(`<h2>Задание №1.\nМеня зовут ${nameUser}. Мне ${age} лет. Я проживаю в
+    городе ${city} и работаю в компании ${company}. Мои контактные данные:
+    ${phone}, ${email}. </h2>`);
 
-let width = 10
-let height = 23
-let SPryam = width * height
+    document.write(`<h2>Задание №2. ${nameUser} родился в ${new Date().getFullYear() - age} году </h2>`);
+}
 
-let h = 10
-let VCilindra = Math.PI * h * Math.pow(a7 , 2) / 4 
+//задание 3
+{
+    let check = true
+    let number;
+    while(check) {
+        number = Number(prompt("Введите шестизначное число"))
+        if(String(number).length == 6) {
+            check = false;
+        }
+        else {
+            alert(`Введенное число должно иметь 6 цифер (${year})`);
+        }
+    }
+    let sumFirst = String(number).slice(0,String(number).length / 2)
+                             .split('')
+                             .reduce(function(previousValue, currentValue) {
+                                    return Number(previousValue) + Number(currentValue);
+                             });
+    let sumLast = String(number).slice(String(number).length / 2, String(number).length)
+                            .split('')
+                            .reduce(function(previousValue, currentValue) {
+                                    return Number(previousValue) + Number(currentValue);
+                            });
+    let answer = "нет"
+    if(sumLast === sumFirst) {
+        answer = "да"
+    }
+    document.write(`<h2>Задание №3. ${answer}`);
+}
 
-let r = 5
-let SKruga = Math.PI * Math.pow(5, 2)
+//задание 4
+{
+    let a1 = 1;
+    let a2 = 0;
+    let a3 = -3;
+    const isCheck = a => {
+        return (a > 0) ? "верно" : (a === 0) ? "а равно 0" : "не верно";
+    
+    }
+    document.write(`<h2>Задание №4. <br>Если а = 1, то ${(isCheck(a1))}; <br>Если а = 0, то ${(isCheck(a2))}; <br>Если а = -3, то ${(isCheck(a3))};`);    
+}
 
-let a = 5
-let b = 7
-let STrap = (a + b) * h / 2
+//задание 5
+{
+    let a = 10;
+    let b = 2;
+    document.write(`<h2>Задание №5. 
+                    <br>Сумма = ${(a + b) > 1 ? Math.pow(a + b, 2) : a + b}; 
+                    <br>Разность = ${a - b}; 
+                    <br>Произведение = ${a * b};
+                    <br>Частное = ${a / b};`
+                    );    
+}
 
-let S = 2
-let p = 0.1
-let years = 5
-let Pereplata = S * p * years
+//задание 6
+{
+    let a = prompt("Введите число a")
+    let b = prompt("Введите число b")
+    document.write(`<h2>Задание №6. 
+                    <br> ${(a > 2 && a < 11) || (b >= 6 && b < 14) ? "Верно" : "Неверно" }`);    
+}
 
-let xa = 8
-let xb = 3
-let x1 = (16 - xa + 2 * xb) / 2
-let x2 = (xa - 15 * xb) / (xb - 6)
-let x3 = 23780 / (3 + xa + xb)
+//задание 7
+{
+    let minute = Number(prompt("Введите кол-во минут"))
+    let part = Math.ceil((minute / (60/4)))
+    document.write(`<h2>Задание №7. 
+                    <br>Четверть часа: ${part === 0 ? 1 : part}`);  
+}
 
-console.log("Задание №8\nx1 = " + x1 + "\n" + 
-                         "x2 = " + x2.toFixed(2) + "\n" + 
-                         "x3 = " + x3.toFixed(2))
+const year = 365;
+const month = 31;
+const week = 7;
+const hours = 24;
+const minuteOrSecond = 60;
 
-console.log("Задание №7\nПереплата = " + Pereplata + " млн.руб.") 
-console.log("Задание №6\nПлощать трапеции = " + STrap + " см2") 
-console.log("Задание №5\nПлощать круга = " + SKruga.toFixed(2) + " см2") 
-console.log("Задание №4\nОбъем цилиндра = " + VCilindra.toFixed(2) + " см3") 
-console.log("Задание №3\nПлощадь прямоугольника = " + SPryam + " см2") 
-console.log("Задание №2\n" + 
-            "a1 = " + a1 + "\n" +
-            "a2 = " + a2 + "\n" +
-            "a3 = " + a3 + "\n" +
-            "a4 = " + a4 + "\n" +
-            "a5 = " + a5 + "\n" +
-            "a6 = " + a6 + "\n" +
-            "a7 = " + a7 + "\n" +
-            "a8 = " + a8 + "\n" +
-            "a9 = " + a9 + "\n" +
-            "a10 = " + a10 + "\n" +
-            "a11 = " + a11 + "\n" +
-            "a12 = " + a12 + "\n" +
-            "a13 = " + a13 + "\n" +
-            "a14 = " + a14 + "\n" +
-            "a15 = " + a15 + "\n" +
-            "a16 = " + a16 + "\n" +
-            "a17 = " + a17 + "\n" +
-            "a18 = " + a18 + "\n")
+//задание 8, 10
+{
+    let check = true
+    let day;
+    while(check) {
+        day = Number(prompt("Введите день"));
+        if(day < 1 || day > year) {
+            alert(`значение дня должно быть положительным, но меньше дней в году (${year})`);
+        } else {
+            check = false;
+        }
+        
+    }
+    let decada = Math.ceil((day % month / 10))
+    document.write(`<h2>Задание №8. 
+                    <br>Декада номер ${day === month ? 3 : decada}`); 
+    let monthNow = Math.ceil(day / month)   
+    let timeYear = ''
+    switch (monthNow) {
+        case 1:
+        case 2:
+        case 12:
+
+            timeYear = "зима"
+            break;
+        case 3:
+        case 4:
+        case 5:
+            timeYear = "весна"
+            break;
+        case 6:
+        case 7:
+        case 8:
+            timeYear = "лето"
+            break;
+        case 9:
+        case 10:
+        case 11:
+            timeYear = "осень"
+            break;
+        default:
+            timeYear = " неудалось определить пору года"
+            break;
+    }
+    document.write(`<h2>Задание №10. 
+    <br>Месяц номер ${monthNow}
+    <br>Пора года ${timeYear}`);  
+}
+
+//задание 9
+{
+    let day = Number(prompt("Введите кол-во дней"))
+    let countYears;
+    let countMonth;
+    let countWeek;
+    let countHours;
+    let countMinute;
+    let countSecond;
+    if(day >= year) {
+        countYears = Math.floor(day / year);
+        day = day % year;
+    } else {
+        countYears = "Меньше года";
+    }
+    if(day >= month) {
+        countMonth = Math.floor(day / month);
+        day = day % month;
+    } else {
+        countMonth = "Меньше месяца";
+    }
+    if(day >= week) {
+        countWeek = Math.floor(day / week);
+        day = day % week;
+    } else {
+        countWeek = "Меньше недели";
+    }
+    if(day > 0) {
+        countHours = Math.floor(day * hours);
+        day = day * hours - countHours;
+    } else {
+        countHours = "Меньше часа";
+    }
+    if(day > 0) {
+        countMinute = Math.floor(day * minuteOrSecond);
+        day = day * minuteOrSecond - countMinute;
+    } else {
+        countMinute = "Меньше минуты";
+    }
+    if(day > 0) {
+        countSecond = Math.floor(day * minuteOrSecond);
+        day = day * minuteOrSecond - countSecond;
+    } else {
+        countSecond = "Меньше секунды";
+    }
+    document.write(`<h2>Задание №9. 
+                    <br>Года: ${countYears}
+                    <br>Месяцев: ${countMonth}
+                    <br>Недель: ${countWeek} 
+                    <br>Часов: ${countHours}
+                    <br>Минут: ${countMinute}
+                    <br>Секунд: ${countSecond}`);  
+}
