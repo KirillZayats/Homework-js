@@ -23,7 +23,7 @@
             check = false;
         }
         else {
-            alert(`Введенное число должно иметь 6 цифер (${year})`);
+            alert(`Введенное число должно иметь 6 цифер`);
         }
     }
     let sumFirst = String(number).slice(0,String(number).length / 2)
