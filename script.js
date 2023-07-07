@@ -1,172 +1,62 @@
-//Задание 1 
-{
-    let regexp = /@/g;
-    let str = 'aaa@bbb@ccc';
-    document.write(`<h2>Задание 1<br/>
-                    Начальная строка: ${str}<br/>
-                    Результат замены: ${str.replace(regexp, '!')}</h2>`)
-}
 
-//Задание 2
-{
-    let opt = {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric'
-    }
-    let date = "2025-12-31";
-    let newDate = new Date(date).toLocaleString('en-US', opt);
-    document.write(`<h2>Задание 2<br/>
-                    Начальная дата: ${date}<br/>
-                    Преобразованная дата: ${newDate}</h2>`)
-}
-
-//Задание 3
-{
-    let strData = "Я учу javascript!";
-    document.write(`<h2>Задание 3<br/>
-                    Начальная строка: ${strData}<br/>
-                    Метод substr: вырезано (${strData.substr(2, 4)}) и (${strData.substr(6)})<br/>
-                    Метод substring: вырезано (${strData.substring(2, 5)}) и (${strData.substring(6)})<br/>
-                    Метод slice: вырезано (${strData.slice(2, 5)}) и (${strData.slice(6)})</h2>`);
-}
-//Задание 4
-{
-    let massive = [4, 2, 5, 19, 13, 0, 10];
-    let valueSqrt;
-    let summaElements = 0;
-    for (let index = 0; index < massive.length; index++) {
-        summaElements += Math.pow(massive[index], 3)      
-    }
-    valueSqrt = Math.sqrt(summaElements);
-    document.write(`<h2>Задание 4<br/>
-                    Дан массив: ${massive}<br/>
-                    Сумма кубов: ${summaElements}<br/>
-                    корень квадратный: ${valueSqrt.toFixed(3)}</h2>`);
-}
-
-//Задание 5
-{
-    let a = [3, 5], 
-        b = [6, 1],
-        c = [];
-    const numbersSubtract = (a, b) => Math.abs(a - b);
-    for (let index = 0; index < a.length; index++) c.push(numbersSubtract(a[index], b[index]));
-    document.write(`<h2>Задание 5<br/>
-                    Дан массив A: [${a}]<br/>
-                    Дан массив B: [${b}]<br/>
-                    Полученный массив C: [${c}]</h2>`);
-}
-//Задание 6
-{
-    let date = new Date().toLocaleString('ru');
-    let validDate = '6.7.2023 12:59:59'
-
-    const setZero = validDate => {
-        validDate = validDate.split(" ").reverse().join(" ");
-        validDate = validDate.split(" ");
-        date = validDate[1].split('.');
-        for (let index = 0; index < date.length; index++) {
-            date[index] = date[index].split('').length == 1 ?  ('0' + date[index]) : date[index];       
-            
+const inputData = strName => {
+    let data;
+    while(true) {
+        data = Number(prompt(`Введите данные (${strName})`));
+        if(!isNaN(data) && data > 0) {
+            break;
+        } else {
+            alert("Вы ввели неверные данные. Надо ввести положительное число!")
         }
-        validDate[1] = date.join('.');
-        return validDate.join(" ");
+    }
+    return data;
+}
+
+let Kettle = function(power, volume, water) {
+    this.power = power;
+    this.volume = volume;
+    this.water = water;
+
+    this.changeAllData = function() {
+        this.power = inputData('Мощность чайника');
+        this.volume = inputData('Объем чайника');
+        this.water = inputData('Кол-во воды в чайнике');
+        if(this.water > this.volume) {
+            alert(`Данное кол-во воды ${this.water}л. в чайнике не допустимо для заданного чайка. Его объем: ${this.volume}л..Введите данные заного!!!`)
+            this.changeAllData();
+        }
     }
 
-    document.write(`<h2>Задание 6<br/>
-                    Текущая дата (не подходит для выполнения): ${date}<br/>
-                    Тестовая дата: ${validDate}<br/>
-                    Результат функции: ${setZero(validDate)}</h2>`);
-}
-//Задание 7
-{
-    let str = 'aa aba abba abbba abca abea';
-    let regexp = /ab{1,}a/g;
-    const findEmelents = (str, regexp) => str.match(regexp);
-    document.write(`<h2>Задание 7<br/>
-                    Текущая строка : ${str}<br/>
-                    Результат: ${findEmelents(str, regexp)}</h2>`);
-}
+    this.output = function() {
+        document.write(`<h2>Данные о чайнике:<br/>
+                        Мощность: ${this.power}Вт.<br/>Объем: ${this.volume}л.<br/>Кол-во воды: ${this.water}л.</h2>`);
+        this.countEmpty();
+    }
 
-const isRegex = (phone, reg) => reg.test(phone);
+    this.countEmpty = function () {
+        document.write(`<h2>Свободного места: ${this.volume - this.water}л.</h2>`)        
+     }
 
-
-//Задание 8
-{
-    let regPhoneNumber = /^(\+)?([- _():=+]?\d[- _():=+]?){10,14}$/;
-    let phoneNumbers = ['375', '+375336153917', 'ergerge', '37529укп456', '+375-29-345-34-56',
-                        '375(33)6154567', '+7(903)888-88-88', '8(999)99-999-99', 
-                        '+380(67)777-7-777']
-
-    document.write(`<h2>Задание 8</h2>`);
-    phoneNumbers.forEach(element => {
-        document.write(`<h2>Номер телефона : ${element}, верный - ${isRegex(element, regPhoneNumber) ? 'да' : 'нет'}</h2>`);
-    });
-}
-
-//Задание 9
-{
-    let regexEmail = /^[a-zA-Z]{1,}[.\-_]?[0-9a-zA-Z]{1,}(\.)?@[a-zA-Z]{2,11}(\.)[a-zA-Z]{2,11}$/;
-    let emails = ['kirill.zayats@mail.ru', 'kirill.zayats.@gmail.com', 'kirill.zaya@mail.r', 
-                  'ivanov.regt@mail.', 'er.rg@mail.ru', '@mail.com', 'F4@mail.ru']
-
-    document.write(`<h2>Задание 9</h2>`);
-    emails.forEach(element => {
-        document.write(`<h2>Почта : ${element}, верная - ${isRegex(element, regexEmail) ? 'да' : 'нет'}</h2>`);
-    });
-}
-
-//Задание 10
-{
-    let urls = ['https://tech.onliner.by/2018/04/26/smart-do-200/?utm_source=main_tile&utm_medium=smartdo200#zag3', 
-                  'https://tech.onliner.by/', 'http://tech.onliner.by/regerg', 'https://tech.onliner.by/2018/04/26/smart-do-200/', 
-                  'https://tech.onliner.by/2018/04/26/smart-do-200/?utm_source=main_tile&utm_medium=smartdo200']
-    const getPartUrl = url => {
-        let parts = [];
-        let elementsUrl = deleteSpace(url.split("/"));
-        parts.push(elementsUrl[0] + '//' + elementsUrl[1])
-        let index = 2
-        if(elementsUrl.length > index) {
-            let strAdressDomain = '/';
-            for (index; index < elementsUrl.length; index++) {
-                if(elementsUrl[index].split('')[0] == '?') {
-                    break;
-                } else {
-                    strAdressDomain += elementsUrl[index] + "/";
-                }
-            }
-            parts.push(strAdressDomain);
-            if(elementsUrl.length - 1 == index) {
-                let endUrl = elementsUrl[index].split('');
-                endUrl.shift();
-                endUrl = endUrl.join('')
-                endUrl = endUrl.split('#');
-                parts.push(endUrl[0]);
-                endUrl.length > 1 && parts.push('#' + endUrl[1]);
+     this.addWater = function () {
+        let valueWater;
+        while(true) {
+            valueWater = inputData('Добавить воды в чайник')
+            if((valueWater + this.water) > this.volume) {
+                alert(`Нельзя влить столько воды! Перелив на ${this.water + valueWater - this.volume}л. Можно ещё залить ${this.volume - this.water}`)
+            } else {
+                break;
             }
         }
-        return parts;
-    }
-
-    const deleteSpace = massive => {
-        for (let index = 0; index < massive.length; index++) {
-            if(massive[index] == '') massive.splice(index, 1);        
-        }
-        return massive;
-    }
-
-    const outputPartsUrl = massive => {
-        document.write(`<h2>Адрес : ${massive}</h2>`);
-        let elements = getPartUrl(massive);
-        for (let index = 0; index < elements.length; index++) {
-            document.write(`<h2>Часть ${index + 1}: ${elements[index]}</h2>`); 
-        }
-        document.write()
-    }
-
-    document.write(`<h2>Задание 10</h2>`);
-    urls.forEach(element => {
-        outputPartsUrl(element);
-    });
+         this.water += valueWater;
+     } 
 }
+
+let kettleSamsung = new Kettle(200, 20, 10);
+document.write(`<h2>Начальные данные о чайнике.</h2>`)        
+kettleSamsung.output();
+kettleSamsung.changeAllData();
+document.write(`<h2>После изменения.</h2>`)        
+kettleSamsung.output();
+kettleSamsung.addWater();
+document.write(`<h2>После залили ещё воды.</h2>`)        
+kettleSamsung.output();
