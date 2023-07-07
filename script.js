@@ -1,320 +1,172 @@
-
-//Задание #1
+//Задание 1 
 {
-    const getNumber = (number, numberSubtract , numberDivide) => (number - numberSubtract) / numberDivide;
-    let number = 70;
-    let numberSubtract = 10;
-    let numberDivide = 5; 
-    document.write(`<h2>Задание №1<br/>
-                    Даны числа: ${number}, ${numberSubtract}, ${numberDivide}<br/>
-                    Результат ф-ции (a - b)/c = ${getNumber(number, numberSubtract, numberDivide)}</h2>`);
+    let regexp = /@/g;
+    let str = 'aaa@bbb@ccc';
+    document.write(`<h2>Задание 1<br/>
+                    Начальная строка: ${str}<br/>
+                    Результат замены: ${str.replace(regexp, '!')}</h2>`)
 }
 
-//Задание #2
+//Задание 2
 {
-    const getСubeAndSquare = number => [Math.pow(number, 3), Math.pow(number, 2)];
-    let number = 11;
-    let valuesMath = getСubeAndSquare(number);
-    document.write(`<h2>Задание №2<br/>
-                    Дано число: ${number}<br/>
-                    Куб числа: ${valuesMath[0]}<br/>
-                    Квадрат числа: ${valuesMath[1]}</h2>`)
+    let opt = {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric'
+    }
+    let date = "2025-12-31";
+    let newDate = new Date(date).toLocaleString('en-US', opt);
+    document.write(`<h2>Задание 2<br/>
+                    Начальная дата: ${date}<br/>
+                    Преобразованная дата: ${newDate}</h2>`)
 }
 
-//Задание #3 
+//Задание 3
 {
-    const getMinValue = (numberA, numberB) => numberA > numberB ? numberB : numberA;
-    const getMaxValue = (numberA, numberB) => numberA > numberB ? numberA : numberB;
-    let numberA = [10, 0, 33];
-    let numberB = [-2, 0, 34];
-    document.write(`<h2>Задание №3
-                    <br/>Даны числа: ${numberA, numberB}
-                    <br/>Числа ${numberA[0]} и ${numberB[0]}, из них большее ${getMaxValue(numberA[0], numberB[0])}, меньшее ${getMinValue(numberA[0], numberB[0])}  
-                    <br/>Числа ${numberA[1]} и ${numberB[1]}, из них большее ${getMaxValue(numberA[1], numberB[1])}, меньшее ${getMinValue(numberA[1], numberB[1])}  
-                    <br/>Числа ${numberA[2]} и ${numberB[2]}, из них большее ${getMaxValue(numberA[2], numberB[2])}, меньшее ${getMinValue(numberA[2], numberB[2])}  
-                    </h2>`)
+    let strData = "Я учу javascript!";
+    document.write(`<h2>Задание 3<br/>
+                    Начальная строка: ${strData}<br/>
+                    Метод substr: вырезано (${strData.substr(2, 4)}) и (${strData.substr(6)})<br/>
+                    Метод substring: вырезано (${strData.substring(2, 5)}) и (${strData.substring(6)})<br/>
+                    Метод slice: вырезано (${strData.slice(2, 5)}) и (${strData.slice(6)})</h2>`);
+}
+//Задание 4
+{
+    let massive = [4, 2, 5, 19, 13, 0, 10];
+    let valueSqrt;
+    let summaElements = 0;
+    for (let index = 0; index < massive.length; index++) {
+        summaElements += Math.pow(massive[index], 3)      
+    }
+    valueSqrt = Math.sqrt(summaElements);
+    document.write(`<h2>Задание 4<br/>
+                    Дан массив: ${massive}<br/>
+                    Сумма кубов: ${summaElements}<br/>
+                    корень квадратный: ${valueSqrt.toFixed(3)}</h2>`);
 }
 
-//Задание #4
-
-let massive = [];
+//Задание 5
 {
-    const createMassive = () => {
-        let startRange, endRange;
-        let massive = [];
-        while(true) {
-            startRange = prompt("Введите начало...")
-            endRange = prompt("Введите конец ...")
-            if(isNaN(startRange) || isNaN(endRange)) {
-                alert("введено не число")
-            } else if(startRange == endRange) {
-                alert("значения равны, задать интервал невозможно")
-            } else {
-                break;
-            }     
-        }
-        if(startRange > endRange) {
-            for (let index = endRange; index <= startRange; index++) {
-                massive.push(index)              
-            }
-        } else {
-            for (let index = startRange; index <= endRange; index++) {
-                massive.push(index)              
-            }
-        }
-        return massive;
-    }   
+    let a = [3, 5], 
+        b = [6, 1],
+        c = [];
+    const numbersSubtract = (a, b) => Math.abs(a - b);
+    for (let index = 0; index < a.length; index++) c.push(numbersSubtract(a[index], b[index]));
+    document.write(`<h2>Задание 5<br/>
+                    Дан массив A: [${a}]<br/>
+                    Дан массив B: [${b}]<br/>
+                    Полученный массив C: [${c}]</h2>`);
+}
+//Задание 6
+{
+    let date = new Date().toLocaleString('ru');
+    let validDate = '6.7.2023 12:59:59'
 
-    const outputData = massive => {
-        document.write(`<h2>Задание №4 <br/> Полученный массив: ${massive}</h2>`);
+    const setZero = validDate => {
+        validDate = validDate.split(" ").reverse().join(" ");
+        validDate = validDate.split(" ");
+        date = validDate[1].split('.');
+        for (let index = 0; index < date.length; index++) {
+            date[index] = date[index].split('').length == 1 ?  ('0' + date[index]) : date[index];       
+            
+        }
+        validDate[1] = date.join('.');
+        return validDate.join(" ");
     }
-    massive = createMassive()
-    outputData(massive);
+
+    document.write(`<h2>Задание 6<br/>
+                    Текущая дата (не подходит для выполнения): ${date}<br/>
+                    Тестовая дата: ${validDate}<br/>
+                    Результат функции: ${setZero(validDate)}</h2>`);
+}
+//Задание 7
+{
+    let str = 'aa aba abba abbba abca abea';
+    let regexp = /ab{1,}a/g;
+    const findEmelents = (str, regexp) => str.match(regexp);
+    document.write(`<h2>Задание 7<br/>
+                    Текущая строка : ${str}<br/>
+                    Результат: ${findEmelents(str, regexp)}</h2>`);
 }
 
-const isEven = number => ((number % 2) == 0) ? true : false;
+const isRegex = (phone, reg) => reg.test(phone);
 
-//Задание #5
+
+//Задание 8
 {
-    let numberA = 0;
-    let numberB = 11;
-    let numberC = 4
-    let strEven = 'четное';
-    let strNoEven = 'не четное'
-    document.write(`<h2>Задание №5 <br/>
-                    Число ${numberA} ${isEven(numberA) ? strEven : strNoEven} <br/>
-                    Число ${numberB} ${isEven(numberB) ? strEven : strNoEven} <br/>
-                    Число ${numberC} ${isEven(numberC) ? strEven : strNoEven} <br/>
-                    </h2>`);
+    let regPhoneNumber = /^(\+)?([- _():=+]?\d[- _():=+]?){10,14}$/;
+    let phoneNumbers = ['375', '+375336153917', 'ergerge', '37529укп456', '+375-29-345-34-56',
+                        '375(33)6154567', '+7(903)888-88-88', '8(999)99-999-99', 
+                        '+380(67)777-7-777']
 
+    document.write(`<h2>Задание 8</h2>`);
+    phoneNumbers.forEach(element => {
+        document.write(`<h2>Номер телефона : ${element}, верный - ${isRegex(element, regPhoneNumber) ? 'да' : 'нет'}</h2>`);
+    });
 }
 
-//Задание #6
+//Задание 9
 {
-    const getEvenMasive = massive => {
-        for (let index = 0; index < massive.length; index++) {
-            if(!isEven(massive[index])) {
-                massive.splice(index, 1);
-                index--;
-            }
-        }
-        return massive;
-    }
-    document.write(`<h2>Задание №6 <br/> 
-                    Полученный массив после удалнения нечетных чисел: ${getEvenMasive(massive)}</h2>`);
+    let regexEmail = /^[a-zA-Z]{1,}[.\-_]?[0-9a-zA-Z]{1,}(\.)?@[a-zA-Z]{2,11}(\.)[a-zA-Z]{2,11}$/;
+    let emails = ['kirill.zayats@mail.ru', 'kirill.zayats.@gmail.com', 'kirill.zaya@mail.r', 
+                  'ivanov.regt@mail.', 'er.rg@mail.ru', '@mail.com', 'F4@mail.ru']
 
-}
-
-//Задание #7
-{
-    const createPiramida = (height, simbol) => {
-        let pirabidaMassive = new Array(height);
-        let valuesHeight = height;
-        for (let row = height - 1; row >= 0; row--) {
-            pirabidaMassive[row] = new Array(height);
-            for (let column = 0; column < valuesHeight; column++) {  
-                if(simbol != '') {
-                    pirabidaMassive[row][column] = simbol;     
-                } else {
-                    pirabidaMassive[row][column] = row + 1;     
-                }
-            }     
-            valuesHeight--;   
-        }
-        return pirabidaMassive;
-    }
-
-    const inputValues = () => {
-        let inputNumber;
-        let simbol;
-        while(true) {
-            inputNumber = prompt('Введите высоту пирамиды (задание 7)');
-            simbol = prompt('Введите символ');
-            if(isNaN(inputNumber)) {
-                alert("Ошибка - введеное вами значение не удалось преобразовать в число." + 
-                "Если хотите продолжить введите число (высоту для пирамиды)");
-            } else {
-                break;
-            }     
-        }
-
-        return [inputNumber, simbol];
-    }
-
-    let values = inputValues();
-    let massivePidamide = createPiramida(values[0], values[1]);
-    document.write(`<h2>Задание №11 <br/>Пирамида:</h2>`);
-    for (let rowIndex = 0; rowIndex < massivePidamide.length; rowIndex++) {
-        for (let columnIndex = 0; columnIndex < massivePidamide[rowIndex].length; columnIndex++) {
-            document.write(`${massivePidamide[rowIndex][columnIndex]}`);
-        }      
-        document.write(`<br/>`);
-    }
-}
-
-//Задание #8
-{
-    const initMassive = (height, weight) => {
-        let massive = new Array(height);
-        for (let rowIndex = 0; rowIndex < height; rowIndex++) {
-            massive[rowIndex] = "";
-            for (let columnIndex = 0; columnIndex < weight; columnIndex++) massive[rowIndex] += "_";
-        }
-        return massive;
-    }
-
-    const inputHeight = () => {
-        let minLenght = 3;
-        let heightPyramid;
-        while(1) {
-            heightPyramid = Number(prompt(`Введите высоту пирамиды`));
-            if(!isNaN(heightPyramid) && heightPyramid >= minLenght) {
-                break;
-            } else if(heightPyramid < minLenght) {
-                alert(`Минимальная высота пирамиды равна ${minLenght}`);
-            } else {
-                alert("Что то пошло не так. Введите число.");
-            }
-        }
-        return heightPyramid;
-    }
-
-    const getPiramid = heightPyramid => {
-        let weightPyramid = 2 * heightPyramid - 1;
-        let massive = initMassive(heightPyramid, weightPyramid);
-    
-        let startIndexWeight = 0;
-        let valuePyramid = "*";
-        let endIndexWeight = weightPyramid;
-    
-        for (let row = heightPyramid - 1; row >= 0; row--) {
-            massive[row] = massive[row].split('');
-            for (let column = startIndexWeight; column < endIndexWeight; column++) {  
-                massive[row][column] = valuePyramid;     
-            }
-            massive[row] = massive[row].join('');
-            startIndexWeight++;
-            endIndexWeight--;
-        }
-        return massive;
-    }
-
-    const getRevercePiramid = heightPyramid => {
-        let weightPyramid = 2 * heightPyramid - 1;
-        let massive = initMassive(heightPyramid, weightPyramid);
-    
-        let startIndexWeight = 0;
-        let valuePyramid = "*";
-        let endIndexWeight = weightPyramid;
-        for (let row = 0; row < heightPyramid; row++) {
-            massive[row] = massive[row].split('');
-            for (let column = startIndexWeight; column < endIndexWeight; column++) {  
-                massive[row][column] = valuePyramid;     
-            }
-            massive[row] = massive[row].join('');
-            startIndexWeight++;
-            endIndexWeight--;
-        }
-        return massive;
-    }
-
-    let heightPyramid = inputHeight();
-    let massive = getPiramid(heightPyramid);
-    let massiveReverce = getRevercePiramid(heightPyramid)
-    document.write(`<h2>Задание №8 <br/>Пирамида:</h2>`);
-    for (let rowIndex = 0; rowIndex < heightPyramid; rowIndex++) {
-        document.write(`${massive[rowIndex]}`);    
-        document.write(`<br/>`);
-    }
-    document.write(`<h2>Перевернутая пирамида:</h2>`)
-    for (let rowIndex = 0; rowIndex < heightPyramid; rowIndex++) {
-        document.write(`${massiveReverce[rowIndex]}`);    
-        document.write(`<br/>`);
-    }
-}
-
-//Задание #9
-{
-
-const getMassiveNumbersFib = () => {
-    let massive = [0, 1];
-    let maxValue = 1000;
-    let index = massive.length - 1;
-    while(massive[index] <= maxValue) {    
-        massive.push(massive[index] + massive[index - 1])
-        index = massive.length - 1;
-    }
-    massive.pop();
-    return massive;
-} 
-document.write(`<h2>Задание №9<br/>
-                Массив с числами Фибоначи: ${getMassiveNumbersFib()}</h2>`);
-}
-
-//Задание 11
-{
-    const outputMassive = (massive, index) => {
-        if(index < massive.length) {
-            document.write(`<h2>Число №${index + 1} = ${massive[index]}</h2>`);
-            outputMassive(massive, ++index);
-        }
-    }
-
-    let massive = [1, 2, 3, 4, 5, 0, 7, 8, 9, 10];
-    document.write(`<h2>Задание 11</h2>`);
-    outputMassive(massive, 0)
+    document.write(`<h2>Задание 9</h2>`);
+    emails.forEach(element => {
+        document.write(`<h2>Почта : ${element}, верная - ${isRegex(element, regexEmail) ? 'да' : 'нет'}</h2>`);
+    });
 }
 
 //Задание 10
 {
-    const getSumNumbers = (numbers, index, sum) => {
-        if(index < numbers.length) {
-            sum += Number(numbers[index])
-            getSumNumbers(numbers, ++index, sum)
-        } else if(sum > 9) {
-            getSumNumbers(String(sum), 0, 0)
-        } else {
-            document.write(`<h2>Сумма цифер = ${sum}</h2>`)
+    let urls = ['https://tech.onliner.by/2018/04/26/smart-do-200/?utm_source=main_tile&utm_medium=smartdo200#zag3', 
+                  'https://tech.onliner.by/', 'http://tech.onliner.by/regerg', 'https://tech.onliner.by/2018/04/26/smart-do-200/', 
+                  'https://tech.onliner.by/2018/04/26/smart-do-200/?utm_source=main_tile&utm_medium=smartdo200']
+    const getPartUrl = url => {
+        let parts = [];
+        let elementsUrl = deleteSpace(url.split("/"));
+        parts.push(elementsUrl[0] + '//' + elementsUrl[1])
+        let index = 2
+        if(elementsUrl.length > index) {
+            let strAdressDomain = '/';
+            for (index; index < elementsUrl.length; index++) {
+                if(elementsUrl[index].split('')[0] == '?') {
+                    break;
+                } else {
+                    strAdressDomain += elementsUrl[index] + "/";
+                }
+            }
+            parts.push(strAdressDomain);
+            if(elementsUrl.length - 1 == index) {
+                let endUrl = elementsUrl[index].split('');
+                endUrl.shift();
+                endUrl = endUrl.join('')
+                endUrl = endUrl.split('#');
+                parts.push(endUrl[0]);
+                endUrl.length > 1 && parts.push('#' + endUrl[1]);
+            }
         }
+        return parts;
     }
 
-    let number = 123456;
-    document.write(`<br/><h2>Задание 10</h2>`);
-    getSumNumbers(String(number), 0, 0)
-}
-
-//Задание 12
-{
-    const getData = () => {
-        let name = prompt(`Введите ваше имя`);
-        let surname = prompt(`Введите вашу фамилию`);
-        let lastname = prompt(`Введите ваше отчество`);
-        let numberGroup = prompt(`Введите номер группы`);
-        let strNameWork = 'Домашняя работа: «Функции»';
-        let strGroup = `Выполнил: студент гр. ` + numberGroup;
-        let fullName = surname + " " + name + " " + lastname;
-        let lengthLine = 2;
-        if(strNameWork.length >= strGroup.length && strNameWork.length >= fullName.length) {
-            lengthLine += strNameWork.length;
-        } else if(strGroup.length >= strNameWork.length && strGroup.length >= fullName.length) {
-            lengthLine += strGroup.length;
-        } else {
-            lengthLine += fullName.length;
+    const deleteSpace = massive => {
+        for (let index = 0; index < massive.length; index++) {
+            if(massive[index] == '') massive.splice(index, 1);        
         }
-        let lengthAddLine = lengthLine - 2 - strNameWork.length;
-        for (let index = 0; index < lengthAddLine; index++) strNameWork += " ";
-        lengthAddLine = lengthLine - 2 - strGroup.length;
-        for (let index = 0; index < lengthAddLine; index++) strGroup += " ";
-        lengthAddLine = lengthLine - 2 - fullName.length;
-        for (let index = 0; index < lengthAddLine; index++) fullName += " ";
-        
-
-        
-        let line = '';
-        for (let index = 0; index < lengthLine; index++) line += '*';
-
-        console.log(`Задание №12\nДанные:\n${line}\n*${strNameWork}*\n*${strGroup}*\n*${fullName}*\n${line}`);
+        return massive;
     }
 
-    getData();
+    const outputPartsUrl = massive => {
+        document.write(`<h2>Адрес : ${massive}</h2>`);
+        let elements = getPartUrl(massive);
+        for (let index = 0; index < elements.length; index++) {
+            document.write(`<h2>Часть ${index + 1}: ${elements[index]}</h2>`); 
+        }
+        document.write()
+    }
+
+    document.write(`<h2>Задание 10</h2>`);
+    urls.forEach(element => {
+        outputPartsUrl(element);
+    });
 }
