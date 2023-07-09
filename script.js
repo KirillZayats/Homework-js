@@ -1,167 +1,262 @@
-document.querySelector('html').setAttribute('lang', 'en');
+const createElementsCardList = () => {
+    let listElements = [];
+    let title = document.createElement("h2");
+    title.innerHTML = "To do list";
 
-let title = document.createElement('title');
-title.innerHTML = 'Homework 8';
+    let inputCreateList = document.createElement("input");
+    inputCreateList.setAttribute("class", "input_create");
+    inputCreateList.setAttribute("type", "text");
+    inputCreateList.setAttribute("placeholder", "Type your task...");
 
-let metaCharset = document.createElement('meta');
-metaCharset.setAttribute('charset', 'UTF-8');
-let metaView = document.createElement('meta');
-metaView.setAttribute('name', 'viewport');
-metaView.setAttribute('content', 'width=device-width, initial-scale=1.0');
+    let listTask = document.createElement("ul");
 
-document.head.appendChild(title);
-document.head.appendChild(metaCharset);
-document.head.appendChild(metaView);
+    listElements.push(title, inputCreateList, listTask);
+    return listElements;
+};
 
-let titleH1 = document.createElement('h1');
-titleH1.innerHTML = 'Choose Your Option';
-let paragraphBody = document.createElement('p');
-paragraphBody.innerHTML = 'But I must explain to you how all this mistaken idea of denouncing';
-let divContainer = document.createElement('div');
-divContainer.setAttribute('class', 'container');
-divContainer.innerHTML = `
-    <div class="block-info">
-    <p class="pre-title">FREELANCER</p>
-    <h2 class="title">Initially designed to </h2>
-    <p class="text">But I must explain to you how all this mistaken idea of denouncing </p>
-    <button>START HERE</button>
-    </div>
-    <div class="block-info">
-    <p class="pre-title">STUDIO</p>
-    <h2 class="title">Initially designed to </h2>
-    <p class="text">But I must explain to you how all this mistaken idea of denouncing </p>
-    <button>START HERE</button>
-    </div>`;
-console.log(titleH1);
-document.body.appendChild(titleH1);
-document.body.appendChild(paragraphBody);
-document.body.appendChild(divContainer);
+const addElementsContainer = () => {
+    let listElements = createElementsCardList(),
+        containerCardList = document.createElement("div"),
+        listContainers = [];
 
-let styleHtml = document.createElement('style');
-styleHtml.innerHTML = `
-    @import url('https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&display=swap');
+    containerCardList.setAttribute("class", "container-list");
+    listElements.forEach((element) => {
+        containerCardList.appendChild(element);
+    });
+    listContainers.push(containerCardList);
+    return listContainers;
+};
 
+const addContainersBody = () => {
+    addElementsContainer().forEach((element) => {
+        document.body.appendChild(element);
+    });
+};
+
+const addStyle = () => {
+    let stylesCard = document.createElement("style");
+    stylesCard.innerHTML = `
     * {
         margin: 0;
         padding: 0;
     }
 
     :root {
-        --color-main: #212121;
-        --color-text: #9FA3A7;
+        --color-text: #fff;
         --color-background: #8F75BE;
         --color-marker: #FFC80A;
-        --color-marker-text: #fff;
+        --color-decor: #212121;
     }
 
-    body {
-        text-align: center;
-    }
 
-    h1 {
-        margin: 122px auto 10px;
-        color: var(--color-main);
-    }
-
-    h1,
-    h2 {
-        font-family: Arvo;
-        font-size: 36px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 46px;
-    }
-
-    body>p {
-        font-family: 'Open Sans';
-        font-size: 14px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 26px;
-        color: var(--color-text);
-    }
-
-    .container {
-        max-width: 1280px;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        margin: 55.5px auto 139px;
-    }
-
-    .block-info {
-        max-width: 401px;
-        width: 100%;
-        box-shadow: 0px 0px 5px #E8E9ED;
-    }
-
-    .block-info:last-child {
+    .container-list {
         background: var(--color-background);
-    }
-
-    .pre-title {
-        margin: 81px auto 19px;
-    }
-
-    .pre-title,
-    button {
-        font-family: Montserrat;
-        font-size: 12px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: normal;
-        letter-spacing: 2.4px;
-    }
-
-    .text,
-    h2 {
-        max-width: 210px;
+        max-width: 300px;
         width: 100%;
-        margin: 0 auto;
-    }
-
-    .text {
-        font-family: 'Open Sans';
-        font-size: 12px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 22px;
-    }
-
-    h2 {
-        margin-bottom: 25px;
-
-    }
-
-    button {
-        margin: 62px auto 90px;
-        border-radius: 40px;
-        border: 2px solid var(--color-marker);
-        height: 55px;
-        width: 150px;
-        background: transparent;
-    }
-
-    .block-info:first-child .pre-title,
-    .block-info:first-child .text {
+        margin: 50px auto;
+        text-align: center;
+        padding: 5px 0;
         color: var(--color-text);
     }
 
-    .block-info:last-child,
-    .block-info:last-child button {
-        color: var(--color-marker-text);
+    ul {
+        list-style: none;
+    }
+    li {
+        display: flex;
+        gap: 10px;
+        width: 90%;
+        margin: 5px auto;
+        font-size: 18px;
+        line-height: 30px;
+        box-shadow: 0px 1px 0px var(--color-text);
+        cursor: pointer;
     }
 
-    .block-info:first-child,
-    .block-info:first-child button {
-        color: var(--color-main);
+    li input {
+        width: 24px;
+        height: 24px;
+        margin: 3px 0;
+        accent-color: var(--color-background);
+        cursor: pointer;
     }
 
-    .block-info:last-child .pre-title {
-        color: #FFC80A;
-    } 
-`;
+    h2 {
+        color: var(--color-marker);
+    }
 
-document.head.appendChild(styleHtml);
+    p {
+        max-width: 235px;
+        width: 100%;
+        text-align: left;
+    }
+
+    .p-toggle {
+        text-decoration: line-through;
+        text-decoration-color: var(--color-decor);
+    }
+
+    .input_create, button {
+        width: 90%;
+        height: 30px;
+        font-size: 15px;
+        font-weight: bold;
+        color: var(--color-background);
+        background: var(--color-text);
+        border: none;
+    }
+    
+    button:hover {
+        background: var(--color-marker);
+        cursor: pointer;
+    }
+    
+    button:active {
+        transform: scale(0.98);
+        box-shadow: 3px 2px 22px 1px var(--color-decor);
+    }
+
+    .block-mark_delete {
+        width: 24px;
+        height: 24px;
+        margin: 3px 0px 0px auto;
+    }
+    
+    .line {
+        width: 100%;
+        height: 3px;
+        background: var(--color-text);
+        position: relative;
+    }
+    
+    .line-start {
+        transform: rotate(-45deg);
+        top: 11px;
+    }
+
+    .block-mark_delete:hover .line {
+        background: var(--color-marker);
+    }
+    
+    .line-end {
+        transform: rotate(45deg);
+        top: 8px;
+    }
+
+    svg {
+        margin-top: 3px;
+    }
+
+    svg:hover polyline {
+        fill: var(--color-marker);
+    }`;
+
+    document.head.appendChild(stylesCard);
+};
+
+const inputNameTask = () => {
+    let inputCreate = document.querySelector('.input_create');
+    inputCreate.addEventListener('keyup', (event) => {
+        if(event.code == 'Enter' && event.target.value) {
+            countEntry++;
+            countEntry === 1 && addButtonDelAll();
+            addTask(event.target.value);
+            event.target.value = '';
+        } else if (event.code == 'Enter' && !event.target.value) {
+            alert("Input is empty! Type name task and press Enter.")
+        }
+    })
+
+}
+
+const addButtonDelAll = () => {
+    let button = document.createElement('button');
+    button.innerHTML = 'Delete all task'
+    document.querySelector('.container-list').appendChild(button);
+    button.addEventListener('click', () => {
+        document.querySelectorAll('li').forEach(element => {
+            element.remove();
+        })
+        button.remove();
+        countEntry = 0;
+    })
+}
+
+const addTask = (nameTask) => { 
+    let recordTask = document.createElement('li'),
+        inputCheckBox = document.createElement('input'),
+        paragrafTask = document.createElement('p');
+    inputCheckBox.setAttribute('type', 'checkbox');
+    paragrafTask.innerHTML = nameTask;
+    recordTask.appendChild(inputCheckBox);
+    recordTask.appendChild(paragrafTask);
+    recordTask.innerHTML += ` <svg fill="#fff" viewBox="0 0 50 50"
+        width="24px" height="24px">
+        <polyline fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            stroke-miterlimit="10" points="42.948,12.532 10.489,44.99 3,47 5.009,39.511 37.468,7.052 " />
+        <path
+            d="M45.749,11.134c-0.005,0.004,0.824-0.825,0.824-0.825c1.901-1.901,1.901-4.983,0.002-6.883c-1.903-1.902-4.984-1.9-6.885,0c0,0-0.83,0.83-0.825,0.825L45.749,11.134z" />
+        <polygon points="5.191,39.328 10.672,44.809 3.474,46.526 " />
+        </svg>`;
+    recordTask.appendChild(addMarkDelete());
+    document.querySelector('ul').appendChild(recordTask);
+}
+
+const addMarkDelete = () => {
+    let lineStart = document.createElement('div'),
+        lineEnd = document.createElement('div'),
+        blockMarkDelete = document.createElement('div');
+    blockMarkDelete.setAttribute('class', 'block-mark_delete');
+    lineStart.setAttribute('class', 'line line-start');
+    lineEnd.setAttribute('class', 'line line-end');
+    blockMarkDelete.appendChild(lineStart);
+    blockMarkDelete.appendChild(lineEnd);
+    return blockMarkDelete;
+}
+
+const checkTask = () => {
+    let elementsTask = document.querySelector('ul');
+    elementsTask.addEventListener('click', (event) => {
+        let element = event.target.parentElement,
+            checkbox = element.querySelector('input');
+        if(element.className == 'block-mark_delete') {
+            element = element.parentElement;
+        }
+        if(event.target.tagName == "P") {
+            checkbox.checked = !checkbox.checked ? true : false
+            element.querySelector('p').classList.toggle('p-toggle')
+        } else if(event.target.tagName == "INPUT") {
+            checkbox.checked = !checkbox.checked ? false : true
+            element.querySelector('p').classList.toggle('p-toggle')
+        } else if(event.target.tagName == "DIV") {
+            elementsTask.children.length == 1 && document.querySelector('button').remove();
+            element.remove();
+            countEntry = 0;
+        } else if(event.target.tagName == "svg" ||
+                  event.target.parentElement.tagName == 'svg') {
+            let nameTask = '';
+            while(true) {
+                nameTask = prompt("Input new name task")
+                if(nameTask.length) {
+                    break;
+                } else {
+                    alert('You write nothing. Let is try again :)');
+                }
+            }
+
+            if(event.target.parentElement.tagName == 'svg') {
+                element.parentElement.querySelector('p').innerHTML = nameTask;
+            } else {
+                element.querySelector('p').innerHTML = nameTask;
+            }
+        }
+    })
+}
+
+let countEntry = 0;
+window.addEventListener('load', () => {
+    addStyle();
+    addContainersBody();
+    inputNameTask();
+    checkTask();
+})
