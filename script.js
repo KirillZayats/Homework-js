@@ -114,3 +114,78 @@ kettle.setWater(10);
 console.log(kettle.toString());
 kettle.enable();
 kettle.on();
+
+
+let DocumentHtml = function() {
+    this.create = (tagName) => {
+        return document.createElement(tagName);
+    }
+
+    this.attr = (element, nameAttr, ValueAttr) => {
+        element.setAttribute(nameAttr, ValueAttr)
+
+    }
+
+    this.html = (element, massiveValue) => {
+        for (const value of massiveValue) {
+            element.innerHTML += value + " ";
+        }
+    }
+
+    this.search = (element, selector) => {
+        return element.querySelectorAll(selector);
+    }
+
+    this.addClass = (element, className) => {
+        element.classList.add(className);
+    }
+
+    this.removeClass = (element, className) => {
+        element.classList.remove(className);
+    }
+
+    this.toggleClass = (element, className) => {
+        element.classList.toggle(className);
+    }
+
+    this.hasClass = (element, className) => {
+        return element.classList.contains(className);
+    }
+
+    this.append = (element, newElement, beforeElement) => {
+        beforeElement ? element.insertBefore(newElement, beforeElement) :
+                        element.appendChild(newElement);
+    }
+
+    this.on = (element, eventName, funcName) => {
+        element.addEventListener(eventName, funcName)
+    }
+}
+
+let site = new DocumentHtml();
+let classColor = 'color';
+let text = site.create('p');
+site.attr(text, 'class', 'text color');
+site.html(text, [`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy 
+                  text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has 
+                  survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised 
+                  in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software 
+                  like Aldus PageMaker including versions of Lorem Ipsum.`]);
+site.append(document.body, text);
+
+let title = site.create('h1');
+site.attr(title, 'class', `h1 ${classColor}`);
+site.html(title, ["Hello World!", "I Love all of us :)"]);
+site.append(document.body, title, text);
+
+console.log(`Search elements with class color:`);
+console.log(site.search(document.body, `.${classColor}`));
+
+//site.removeClass(text, classColor);
+site.addClass(text, 'color-mod');
+console.log(`Class '${classColor}' is ` + (site.hasClass(text, classColor) ? 'on' : 'off'));
+
+const showClick = (event) => {  
+    console.log(event.type);
+}
+site.on(text, 'click', showClick);
