@@ -43,13 +43,19 @@ class User {
         return `${this.data.name}<br/> Email: ${this.data.email}<br/> 
                Phone number: ${this.data.phone}<br/> Adress: ${this.data.adress}`;
     }
+
+    toJSON() {
+        return {
+            name: this.#data.name,  
+            email: this.#data.email,
+            adress: this.#data.adress,
+            phone: this.#data.phone
+        }
+    }
 }
 
 class Contacts {
     #data = [];
-    constructor(dataMassive) {
-        this.#data = dataMassive ? dataMassive : [];
-    }
 
     add(user) {
         (user instanceof User) ? this.#data.push(user) : alert('You want add object, that dont instance of User');;
@@ -81,7 +87,11 @@ class Contacts {
     }
 
     set data(data) {
-        this.#data = data;
+        data.forEach(element => {
+            let user = new User(element);
+            this.add(user);
+        });
+        //this.#data = data;
     }
 
 }
@@ -141,13 +151,51 @@ class DOM {
 
 class ContactsApp extends Contacts{
     #app = '';
+    #storage;
+    #contactsStorage = '';
     #countContacts = 0;
     constructor(data){
         super(data);
+        //localStorage.clear();
+        this.#clearStorageExpired();
+        this.#contactsStorage = JSON.parse(localStorage.getItem('contacts'));
+        if (this.#contactsStorage !== null && this.#contactsStorage.length !== 0) this.data = this.#contactsStorage;
         this.#initElements();
         this.#initEvents();
     }
 
+    get app() {
+        return this.#app;
+    }
+
+    #clearStorageExpired() {
+        this.#getCookie('storageExpiration') == undefined && localStorage.clear()
+    }
+
+    #clearStorage() {
+        localStorage.clear();
+    }
+
+    get storage() {
+        return this.#storage;
+    }
+
+    set storage(value) {
+        let dateSave = new Date();
+        dateSave.setHours(dateSave.getHours() + 240);
+        document.cookie = `storageExpiration = 10 days; expires=${dateSave.toUTCString()}`;
+        window.localStorage.setItem('contacts', JSON.stringify(value));
+    }
+
+    //получение куки
+    #getCookie(name) {
+        let matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    }
+
+    //инициализация ивентов
     #initEvents() {
         window.addEventListener('load', () => {
             this.#onAdd();
@@ -155,6 +203,7 @@ class ContactsApp extends Contacts{
         })
     }
 
+    //эвент для взаимодействии со списком контактов
     #viewAddInfoUser() {
         let elementsContacts = DOM.search(this.#app, 'ul');
         elementsContacts.addEventListener('click', (event) => {
@@ -184,6 +233,7 @@ class ContactsApp extends Contacts{
         })
     }
 
+    //изменение данных юзера
     #onChange(element, event, index) {
         let nameContact = this.#inputNewValueRecord('name contact', 
             'Name must be more than 1 character and have only letters', Reg.regexName),
@@ -194,6 +244,7 @@ class ContactsApp extends Contacts{
             'Phone number must be from Belarus add have next view (+375440000000)', Reg.regexPhone),
             user = new User({name: nameContact, email: email, adress: adress, phone: phone});
         this.edit(index, user); 
+        this.storage = this.data;
         if(event.target.parentElement.tagName == 'svg') {
             let paragraf = DOM.search(element.parentElement, 'p');
             DOM.htmlClear(paragraf);
@@ -205,6 +256,7 @@ class ContactsApp extends Contacts{
         }
     }
 
+    //ввод новых данных юзера 
     #inputNewValueRecord(massagePrompt, massageError, regex) {
         let value = '';
         while(true) {
@@ -218,6 +270,7 @@ class ContactsApp extends Contacts{
         return value;
     }
 
+    //добавление нового юзера в список
     #onAdd() {
         let inputCreate = DOM.search(this.#app, 'button');
         let inputs = DOM.searchAll(this.#app, 'input');
@@ -226,6 +279,7 @@ class ContactsApp extends Contacts{
             if(user.isCheck()) {
                 this.#addElementListContacts(user, DOM.search(this.#app, 'ul'))
                 this.add(user);
+                this.storage = this.data;
                 this.#countContacts++;
                 for (const input of inputs) {
                     input.value = '';
@@ -238,13 +292,16 @@ class ContactsApp extends Contacts{
         })
     }
 
+    //удаление юзера со списка
     #onRemove(element, elementsContacts, index) {
         elementsContacts.children.length == 1 && DOM.search(this.#app, '.button-delete').remove();
         element.remove();
         this.remove(index);
         this.#countContacts--;
+        this.#countContacts === 0 ? this.#clearStorage() : this.storage = this.data;
     }
 
+    //инициализация элементов
     #initElements() {
         this.#app = DOM.create('div');
         DOM.attr(this.#app, 'class', 'contacts');
@@ -266,6 +323,7 @@ class ContactsApp extends Contacts{
         this.#countContacts >= 1 && this.#createButtonDelAll();
     }
 
+    //добавление записей в список
     #addContantToList() {
         for (const user of this.data) {
             this.#addElementListContacts(user, DOM.search(this.#app, 'ul'));
@@ -273,6 +331,7 @@ class ContactsApp extends Contacts{
         }
     }
 
+    //добавление элементов в запись списка
     #addElementListContacts(user, list) {
         let record = DOM.create('li');
         let valueRecord = DOM.create('p');            
@@ -292,6 +351,7 @@ class ContactsApp extends Contacts{
         DOM.append(list, record);
     }
 
+    //создание кнопки удаление
     #createButtonDelAll() {
         let buttonDelAll = DOM.create('button');
         DOM.attr(buttonDelAll, 'class', 'button-delete')
@@ -300,6 +360,7 @@ class ContactsApp extends Contacts{
         this.#removeAll();
     }
 
+    //создание элемента для отображения всего списка
     #createMarkViewAllInfo() {
         let blockArrow = DOM.create('div'),
             lineStart = DOM.create('div'),
@@ -312,6 +373,7 @@ class ContactsApp extends Contacts{
         return blockArrow;
     }
 
+    //создание элемента удаления записи
     #createMarkDelete() {
         let lineStart = DOM.create('div'),
             lineEnd = DOM.create('div'),
@@ -324,6 +386,7 @@ class ContactsApp extends Contacts{
         return blockMarkDelete;
     }
 
+    //эвент для удаления всех записей со списка
     #removeAll() {
         let button = DOM.search(this.#app, '.button-delete');
         button.addEventListener('click', () => {
@@ -332,16 +395,19 @@ class ContactsApp extends Contacts{
             });
             button.remove();
             this.removeAll();
+            this.#clearStorage();
             this.#countContacts = 0;
         })
     }
 
+    //создание элементов и добавление их в контеинер 
     #createElement(container, massiveTag) {
         for (let index = 0; index < massiveTag.length; index++) {
             DOM.append(container, DOM.create(massiveTag[index]))
         }
     }
 
+    //установка атрибутов для элемента
     #addAttr(massiveTag, massiveAttr) {
         for (let index = 0; index < massiveTag.length; index++) {
             for (let indexJ = 0; indexJ < massiveAttr[index].length; indexJ++) {
@@ -349,19 +415,6 @@ class ContactsApp extends Contacts{
             }           
         }
     }
-
-    get app() {
-        return this.#app;
-    }
 }
 
-let kirill = new User({name: "kirill", email: "kirill.zayats@mail.ru", 
-                       adress: "Respublikanskay d13", phone: '+375295434567'});
-let petya = new User({name: "Petya", email: "petya@mail.ru", 
-                       adress: "pushkin", phone: "375295434567"});
-let kolya = new User({name: "Kolya", email: "kolya@mail.ru", 
-                       adress: "koshkin", phone: "3752954345672"});
-let sasha = new User({name: "sasha", email: "sasha@mail.ru", 
-                       adress: "shkin", phone: "375295434567"});
-
-let contactsApp = new ContactsApp([kirill, petya, kolya]);
+let contactsApp = new ContactsApp();
