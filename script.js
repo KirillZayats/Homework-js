@@ -4,6 +4,46 @@ class Reg {
     static regexPhone = new RegExp('^\\+375(\\s+)?\\(?(17|25|29|33|44)\\)?(\\s+)?[0-9]{3}-?[0-9]{2}-?[0-9]{2}$');
 }
 
+class Address {
+    #data = {};
+
+    constructor(data) {
+        this.data = data;
+    }
+
+    get data() {
+        return this.#data;
+    }
+
+    set data(data) {
+        if(typeof data == 'string') {
+            this.#data = data
+        } else {
+            this.#data.city = data.city ? data.city : 
+                this.#data.city ? this.#data.city : '';
+            this.#data.street = data.street ? data.street : 
+                this.#data.street ? this.#data.street : '';
+            this.#data.suite = data.suite ? data.suite : 
+                this.#data.suite ? this.#data.suite : '';
+        }
+    }
+    
+    toString() {
+        return typeof this.#data == 'string' ? this.#data :
+            `city: ${this.data.city}<br/> street: ${this.data.street}<br/> 
+            suite: ${this.data.suite}`;
+    }
+
+    toJSON() {
+        return typeof this.#data == 'string' ? this.#data :
+            {
+                city: this.#data.city,  
+                street: this.#data.street,
+                suite: this.#data.suite,
+            }
+    }
+}
+
 class User {
     #data = { };
     constructor(data) {
@@ -19,36 +59,36 @@ class User {
     }
 
     isCheck() {
-        return (Reg.regexName.test(this.data.name) && Reg.regexEmail.test(this.data.email) && Reg.regexPhone.test(this.data.phone)) ? true : false;
+        return (Reg.regexName.test(this.data.username) && Reg.regexEmail.test(this.data.email) && Reg.regexPhone.test(this.data.phone)) ? true : false;
     }
 
     getErrorMessageField() {
-        if(!Reg.regexName.test(this.data.name)) return "Name must be more than 1 character and have only letters";
+        if(!Reg.regexName.test(this.data.username)) return "Name must be more than 1 character and have only letters";
         else if(!Reg.regexEmail.test(this.data.email)) return "Email must have the @ symbol (e.g. kirill.zayats@mail.ru).";
         else return "Phone number must be from Belarus add have next view (+375440000000)";
     }
 
     set data(data) {
-        this.#data.name = data.name ? data.name : 
-                    this.#data.name ? this.#data.name : '';
+        this.#data.username = data.username ? data.username : 
+                    this.#data.username ? this.#data.username : '';
         this.#data.email = data.email ? data.email : 
                     this.#data.email ? this.#data.email : '';
-        this.#data.adress = data.adress ? data.adress : 
-                    this.#data.adress ? this.#data.adress : '';
+        this.#data.address = data.address ? new Address(data.address) : 
+                    this.#data.address ? this.#data.address : '';
         this.#data.phone = data.phone ? data.phone : 
                     this.#data.phone ? this.#data.phone : '';
     }
 
     toString() {
-        return `${this.data.name}<br/> Email: ${this.data.email}<br/> 
-               Phone number: ${this.data.phone}<br/> Adress: ${this.data.adress}`;
+        return `${this.data.username}<br/> Email: ${this.data.email}<br/> 
+               Phone number: ${this.data.phone.split(' ')[0]}<br/> Address:<br/>${this.data.address}`;
     }
 
     toJSON() {
         return {
-            name: this.#data.name,  
+            username: this.#data.username,  
             email: this.#data.email,
-            adress: this.#data.adress,
+            address: this.#data.address,
             phone: this.#data.phone
         }
     }
@@ -155,13 +195,19 @@ class ContactsApp extends Contacts{
     #countContacts = 0;
     constructor(data){
         super(data);
-        //localStorage.clear();
+        this.#init();
+    }
+
+    async #init() {
         this.#clearStorageExpired();
-        this.#getDataUser();
         this.#contactsStorage = JSON.parse(localStorage.getItem('contacts'));
-        if (this.#contactsStorage !== null && this.#contactsStorage.length !== 0) this.data = this.#contactsStorage;
-        this.#initElements();
-        this.#initEvents();
+        if (this.#contactsStorage !== null && this.#contactsStorage.length !== 0) {
+            this.data = this.#contactsStorage;
+        } else {
+            await this.#getData()             
+        }
+        await this.#initElements();
+        await this.#initEvents();
     }
 
     get app() {
@@ -195,20 +241,20 @@ class ContactsApp extends Contacts{
         return matches ? decodeURIComponent(matches[1]) : undefined;
     }
 
-    async #getDataUser() {
+    async #getData() {
         const response = await fetch(`https://jsonplaceholder.typicode.com/users`);
-        console.log(response);
-        const json = await response.json();
-        console.log(json);
-        this.data = json;
+        if(response.ok) {
+            const json = await response.json();
+            this.data = await json;
+            this.storage = await this.data;
+        }       
     }
 
     //инициализация ивентов
     #initEvents() {
-        window.addEventListener('load', () => {
-            this.#onAdd();
-            this.#viewAddInfoUser();
-        })
+        this.#onAdd();
+        this.#viewAddInfoUser();
+  
     }
 
     //эвент для взаимодействии со списком контактов
@@ -247,10 +293,10 @@ class ContactsApp extends Contacts{
             'Name must be more than 1 character and have only letters', Reg.regexName),
             email = this.#inputNewValueRecord('email contact', 
             'Email must have the @ symbol (e.g. kirill.zayats@mail.ru).', Reg.regexEmail),
-            adress = prompt(`Input new adress contact`),
+            address = prompt(`Input new address contact`),
             phone = this.#inputNewValueRecord('phone contact', 
             'Phone number must be from Belarus add have next view (+375440000000)', Reg.regexPhone),
-            user = new User({name: nameContact, email: email, adress: adress, phone: phone});
+            user = new User({username: nameContact, email: email, address: address, phone: phone});
         this.edit(index, user); 
         this.storage = this.data;
         if(event.target.parentElement.tagName == 'svg') {
@@ -283,7 +329,7 @@ class ContactsApp extends Contacts{
         let inputCreate = DOM.search(this.#app, 'button');
         let inputs = DOM.searchAll(this.#app, 'input');
         inputCreate.addEventListener('click', () => {
-            let user = new User({name: inputs[0].value, email: inputs[1].value, adress: inputs[2].value, phone: inputs[3].value});
+            let user = new User({username: inputs[0].value, email: inputs[1].value, address: inputs[2].value, phone: inputs[3].value});
             if(user.isCheck()) {
                 this.#addElementListContacts(user, DOM.search(this.#app, 'ul'))
                 this.add(user);
@@ -320,7 +366,7 @@ class ContactsApp extends Contacts{
         let attr = [[{attribute: 'class', value: 'block_inputs'}],
                     [{attribute: 'type', value: 'text'}, {attribute: 'placeholder', value: 'Your name'}],
                     [{attribute: 'type', value: 'text'}, {attribute: 'placeholder', value: 'Your email'}],
-                    [{attribute: 'type', value: 'text'}, {attribute: 'placeholder', value: 'Your adress'}],
+                    [{attribute: 'type', value: 'text'}, {attribute: 'placeholder', value: 'Your address'}],
                     [{attribute: 'type', value: 'tel'}, {attribute: 'placeholder', value: 'Your phone number'}],
                     [{attribute: 'type', value: 'submit'}]];
         this.#addAttr([DOM.search(DOM.search(this.#app, '.container-form'), 'div'), ... DOM.searchAll(this.#app, 'input')], attr);
