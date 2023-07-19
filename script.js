@@ -91,7 +91,6 @@ class Contacts {
             let user = new User(element);
             this.add(user);
         });
-        //this.#data = data;
     }
 
 }
@@ -158,6 +157,7 @@ class ContactsApp extends Contacts{
         super(data);
         //localStorage.clear();
         this.#clearStorageExpired();
+        this.#getDataUser();
         this.#contactsStorage = JSON.parse(localStorage.getItem('contacts'));
         if (this.#contactsStorage !== null && this.#contactsStorage.length !== 0) this.data = this.#contactsStorage;
         this.#initElements();
@@ -193,6 +193,14 @@ class ContactsApp extends Contacts{
         "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
         ));
         return matches ? decodeURIComponent(matches[1]) : undefined;
+    }
+
+    async #getDataUser() {
+        const response = await fetch(`https://jsonplaceholder.typicode.com/users`);
+        console.log(response);
+        const json = await response.json();
+        console.log(json);
+        this.data = json;
     }
 
     //инициализация ивентов
