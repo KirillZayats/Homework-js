@@ -1,10 +1,9 @@
 import DOM from "../helper/helper.js"
 import { header } from "./Header.js";
-import { nav } from "./Nav.js";
 import { main } from "./Main.js";
 import { footer } from "./Footer.js";
 import Product from "../models/Product.js";
-
+console.log(header);
 class App {
     #data = []
     #element;
@@ -18,6 +17,10 @@ class App {
 
     #render() {
         DOM.append(document.body, this.#element);
+        DOM.append(this.#element, header);
+        DOM.append(this.#element, main);
+        DOM.append(this.#element, footer);
+
     }
 
     async init() {

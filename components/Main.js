@@ -1,19 +1,16 @@
-class Main {
+import DOM from "../helper/helper.js";
 
+class Main {
     #element;
 
-    constructor() {
-
-    }
-
     #create() {
-
+        this.element = DOM.create('main')
     }
 
     init() {
         console.log('main');
-
         this.#create();
+        return this.element;
     }
 
     get element() {

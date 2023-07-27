@@ -1,19 +1,18 @@
-class Header {
+import DOM from "../helper/helper.js";
+import { nav } from "./Nav.js";
 
+class Header {
     #element;
 
-    constructor() {
-
-    }
-
     #create() {
-
+        this.element = DOM.create('header')
     }
 
     init() {
         console.log('header');
-
         this.#create();
+        DOM.append(this.element, nav)
+        return this.element;
     }
 
     get element() {

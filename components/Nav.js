@@ -1,18 +1,16 @@
-class Nav {
+import DOM from "../helper/helper.js";
 
+class Nav {
     #element;
 
-    constructor() {
-
-    }
-
     #create() {
-
+        this.element = DOM.create('nav')
     }
 
     init() {
         console.log('nav');
         this.#create();
+        return this.element;
     }
 
     get element() {
