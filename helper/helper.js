@@ -3,8 +3,8 @@ export default class DOM {
         return document.createElement(tagName);
     }
 
-    static attr = (element, nameAttr, ValueAttr) => {
-        element.setAttribute(nameAttr, ValueAttr)
+    static attr = (element, nameAttr, valueAttr) => {
+        element.setAttribute(nameAttr, valueAttr)
     }
 
     static html = (element, value) => {

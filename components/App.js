@@ -1,7 +1,7 @@
 import DOM from "../helper/helper.js"
 import { header } from "./Header.js";
 import { main } from "./Main.js";
-import { footer } from "./Footer.js";
+import { footer }  from "./Footer.js";
 import Product from "../models/Product.js";
 console.log(header);
 class App {
@@ -18,12 +18,13 @@ class App {
     #render() {
         DOM.append(document.body, this.#element);
         DOM.append(this.#element, header);
-        DOM.append(this.#element, main);
+        DOM.append(this.#element, main(this.#data));
         DOM.append(this.#element, footer);
 
     }
 
     async init() {
+        console.log();
         this.#clearStorageExpired();
         this.#contactsStorage = JSON.parse(localStorage.getItem('products'));
         if (this.#contactsStorage !== null && this.#contactsStorage.length !== 0) {

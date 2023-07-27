@@ -6,12 +6,17 @@ class Header {
 
     #create() {
         this.element = DOM.create('header')
+        let logo = DOM.create('div');
+        DOM.addClass(logo, 'logotype');
+        DOM.html(logo, "<p>ZayaKiri</p>");
+
+        DOM.append(this.element, logo);
+        DOM.append(this.element, nav)
     }
 
     init() {
         console.log('header');
         this.#create();
-        DOM.append(this.element, nav)
         return this.element;
     }
 
