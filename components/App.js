@@ -3,27 +3,45 @@ import { header } from "./Header.js";
 import { nav } from "./Nav.js";
 import { main } from "./Main.js";
 import { footer } from "./Footer.js";
+import Product from "../models/Product.js";
 
 class App {
-    constructor() {
+    #data = []
+    #element;
+    #storage;
+    #contactsStorage = '';
 
+    #create() {
+        this.#element = DOM.create('div');
+        DOM.addClass(this.#element, 'app');
     }
 
-    create() {
-
+    #render() {
+        DOM.append(document.body, this.#element);
     }
 
-    render() {
+    async init() {
+        this.#clearStorageExpired();
+        this.#contactsStorage = JSON.parse(localStorage.getItem('products'));
+        if (this.#contactsStorage !== null && this.#contactsStorage.length !== 0) {
+            this.data = this.#contactsStorage;
+        } else {
+            await this.#getData()             
+        }
 
+        await DOM.search(document, 'html').setAttribute('lang', 'en');
+        await this.#createElementHead();
+        await this.#create();
+        await this.#render();
     }
 
-    init() {
-        DOM.search(document, 'html').setAttribute('lang', 'en');
-        this.#createElementHead();
-
-        let containerApp = DOM.create('div');
-        DOM.addClass(containerApp, 'app');
-        DOM.append(document.body, containerApp);
+    async #getData() {
+        const response = await fetch(`https://fakestoreapi.com/products`);
+        if(response.ok) {
+            const json = await response.json();
+            this.data = await json;
+            this.storage = await this.data;
+        }       
     }
 
     #createElementHead() {
@@ -44,5 +62,48 @@ class App {
         DOM.append(document.head, title);
         DOM.append(document.head, style);
     }
+
+    add(product) {
+        (product instanceof Product) ? this.#data.push(product) : alert('You want add object, that dont instance of Product');;
+    }
+
+    get data() {
+        return this.#data;
+    }
+
+    set data(data) {
+        data.forEach(element => {
+            let product = new Product(element);
+            this.add(product);
+        });
+    }
+
+    #clearStorageExpired() {
+        this.#getCookie('storageExpiration') == undefined && localStorage.clear()
+    }
+
+    //получение куки
+    #getCookie(name) {
+        let matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    }
+
+    #clearStorage() {
+        localStorage.clear();
+    }
+
+    get storage() {
+        return this.#storage;
+    }
+
+    set storage(value) {
+        let dateSave = new Date();
+        dateSave.setHours(dateSave.getHours() + 240);
+        document.cookie = `storageExpiration = 10 days; expires=${dateSave.toUTCString()}`;
+        window.localStorage.setItem('products', JSON.stringify(value));
+    }
 }
+
 export default new App().init();
