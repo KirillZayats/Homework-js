@@ -7,11 +7,14 @@ class Nav {
         this.element = DOM.create('nav')
         let linkHome = DOM.create('a');
         let linkBasket = DOM.create('a');
-        DOM.attr(linkHome, 'href', 'http://127.0.0.1:5500/')
-        DOM.attr(linkBasket, 'href', 'http://127.0.0.1:5500/#cart')
-        DOM.html(linkHome, "Home");
-        DOM.html(linkBasket, "Card");
-
+        DOM.addClass(linkHome, 'link-home')
+        DOM.addClass(linkBasket, 'link-basket')
+        DOM.attr(linkBasket, 'href', '#cart')
+        DOM.html(linkHome, "Shop");
+        DOM.html(linkBasket, `<img class="icon-basket"
+                              src="../components/images/basket-white.svg" 
+                              alt="shopping-basket"/>`);
+    
         DOM.append(this.element, linkHome);
         DOM.append(this.element, linkBasket);
     }
