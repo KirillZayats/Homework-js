@@ -21,7 +21,7 @@ class Rating {
     }
 
     toJSON() {
-        return {city: this.#data.city, street: this.#data.street}
+        return {rate: this.data.rate, count: this.data.count}
     }
 }
 
@@ -35,7 +35,7 @@ export default class Product {
         return this.#data;
     }
 
-    set data(data) {
+    set data(data) {   
         this.#data.id = data.id ? data.id : 
                     this.#data.id ? this.#data.id : '';
         this.#data.title = data.title ? data.title : 
@@ -61,13 +61,13 @@ export default class Product {
 
     toJSON() {
         return {
-            id: this.#data.id,  
-            title: this.#data.title,
-            price: this.#data.price,
-            description: this.#data.description,
-            category: this.#data.category,
-            image: this.#data.image,
-            rating: this.#data.rating
+            id: this.data.id,  
+            title: this.data.title,
+            price: this.data.price,
+            description: this.data.description,
+            category: this.data.category,
+            image: this.data.image,
+            rating: this.data.rating
         }
     }
 }

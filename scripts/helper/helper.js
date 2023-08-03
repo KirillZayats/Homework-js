@@ -8,7 +8,7 @@ export default class DOM {
     }
 
     static html = (element, value) => {
-        element.innerHTML += value;
+        element.innerHTML = value;
     }
 
     static htmlClear = (element) => {

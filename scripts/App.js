@@ -1,14 +1,16 @@
-import DOM from "../helper/helper.js"
-import { header } from "./Header.js";
-import { main } from "./Main.js";
-import { footer }  from "./Footer.js";
-import Product from "./models/Product.js";
-console.log(header);
+import DOM from "./helper/helper.js"
+import header from "./components/Header.js"
+import main from "./components/Main.js";
+import { footer }  from "./components/Footer.js";
+import Product from "./core/Product.js";
+import Shop from "./core/Shop.js";
+
 class App {
     #data = []
     #element;
     #storage;
     #contactsStorage = '';
+
 
     #create() {
         this.#element = DOM.create('div');
@@ -17,8 +19,8 @@ class App {
 
     #render() {
         DOM.append(document.body, this.#element);
-        DOM.append(this.#element, header);
-        DOM.append(this.#element, main(this.#data));
+        DOM.append(this.#element, header.init());
+        DOM.append(this.#element, main.init());
         DOM.append(this.#element, footer);
 
     }
@@ -28,15 +30,32 @@ class App {
         this.#clearStorageExpired();
         this.#contactsStorage = JSON.parse(localStorage.getItem('products'));
         if (this.#contactsStorage !== null && this.#contactsStorage.length !== 0) {
-            this.data = this.#contactsStorage;
+            window.shop = new Shop(this.#contactsStorage)
         } else {
             await this.#getData()             
         }
-
+        if(localStorage.getItem('storeApp') !== 0) {
+            JSON.parse(localStorage.getItem('storeApp')).forEach(elem => 
+                window.shop.cart.add(window.shop.getById(elem.id))
+            )
+            header.cartItems = window.shop.cart.get().length;
+        }
         await DOM.search(document, 'html').setAttribute('lang', 'en');
         await this.#createElementHead();
         await this.#create();
         await this.#render();
+
+        window.addEventListener('cartChanged', () => {
+            header.cartItems = window.shop.cart.get().length;
+            header.updateCart();
+            main.router();
+            console.log("cart");
+        })
+
+        window.addEventListener('hashchange', () => {
+            main.router();
+            console.log("hash");
+        });
     }
 
     async #getData() {
@@ -44,8 +63,9 @@ class App {
         if(response.ok) {
             const json = await response.json();
             this.data = await json;
+            window.shop = new Shop(this.data)
             this.storage = await this.data;
-        }       
+        }    
     }
 
     #createElementHead() {
@@ -65,21 +85,6 @@ class App {
         DOM.append(document.head, metaView);
         DOM.append(document.head, title);
         DOM.append(document.head, style);
-    }
-
-    add(product) {
-        (product instanceof Product) ? this.#data.push(product) : alert('You want add object, that dont instance of Product');;
-    }
-
-    get data() {
-        return this.#data;
-    }
-
-    set data(data) {
-        data.forEach(element => {
-            let product = new Product(element);
-            this.add(product);
-        });
     }
 
     #clearStorageExpired() {
