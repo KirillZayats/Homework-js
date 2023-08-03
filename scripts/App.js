@@ -9,8 +9,8 @@ class App {
     #data = []
     #element;
     #storage;
-    #contactsStorage = '';
-
+    #productsStorage = '';
+    #cartStorage = '';
 
     #create() {
         this.#element = DOM.create('div');
@@ -28,13 +28,15 @@ class App {
     async init() {
         console.log();
         this.#clearStorageExpired();
-        this.#contactsStorage = JSON.parse(localStorage.getItem('products'));
-        if (this.#contactsStorage !== null && this.#contactsStorage.length !== 0) {
-            window.shop = new Shop(this.#contactsStorage)
+        this.#productsStorage = JSON.parse(localStorage.getItem('products'));
+        if (this.#productsStorage !== null && this.#productsStorage.length !== 0) {
+            window.shop = new Shop(this.#productsStorage)
         } else {
             await this.#getData()             
         }
-        if(localStorage.getItem('storeApp') !== 0) {
+
+        this.#cartStorage = localStorage.getItem('storeApp')
+        if(this.#cartStorage !== 0 && this.#cartStorage !== null) {
             JSON.parse(localStorage.getItem('storeApp')).forEach(elem => 
                 window.shop.cart.add(window.shop.getById(elem.id))
             )
