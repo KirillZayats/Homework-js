@@ -38,7 +38,6 @@ class App {
 
     #crealeElementList() {
         let listCards = DOM.search(this.#element, 'ul');
-        console.log(this.#data);
         this.#data.forEach(element => {
             let card = DOM.create('li');
             DOM.html(card, `<a href=${element.data.image} target='_blank'><img src="${element.data.image}" alt="product"></a>`);
@@ -59,7 +58,6 @@ class App {
         let position = 0;
         DOM.search(this.#element, ".prev").addEventListener('click', () => {
             width = DOM.search(this.#element, "img").offsetWidth + 12;
-            console.log(width);
             position += width * count;
             position = Math.min(position, 0)
             list.style.marginLeft = position + 'px';
@@ -67,7 +65,6 @@ class App {
 
         DOM.search(this.#element, ".next").addEventListener('click', () => {
             width = DOM.search(this.#element, "img").offsetWidth + 12;
-            console.log(width);
             position -= width * count;
             position = Math.max(position, -width * (listElems.length - count));
             list.style.marginLeft = position + 'px';
